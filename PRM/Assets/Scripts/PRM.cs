@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class PRM : MonoBehaviour {
 
     public GameObject node;
+	public Transform plane;
     private List<GameObject> prmVertices;
     public int numOfNodes;
     void Start ()
@@ -23,8 +24,9 @@ public class PRM : MonoBehaviour {
     Vector3 InsertVertex()
     {
         int x, z;
-        x = Mathf.RoundToInt(Random.Range(-15.0f, 15.0f));
-        z = Mathf.RoundToInt(Random.Range(-15.0f, 15.0f));
+		var maxPos = plane.localScale.x * 10;
+		x = Mathf.RoundToInt (Random.Range (0, maxPos));
+		z = Mathf.RoundToInt(Random.Range(0, maxPos));
         return new Vector3(x, 0, z);
           
     }
