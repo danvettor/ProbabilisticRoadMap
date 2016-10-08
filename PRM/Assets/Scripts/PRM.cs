@@ -4,34 +4,61 @@ using System.Collections.Generic;
 
 public class PRM : MonoBehaviour {
 
-    public GameObject node;
-	public Transform plane;
-    private List<GameObject> prmVertices;
-    public int numOfNodes;
+    private GameObject node;
+	private int numOfNodes;
+    private List<Node> roadmap;
+
+    public Transform plane;
+    public GameObject nodePrefab;
+    public int maxNodes;
+
+
     void Start ()
     {
-        prmVertices = new List<GameObject>();
-        CreateRoadMap();
+        numOfNodes = 0;
+        StartCoroutine(CreateRoadMap());
+        roadmap = new List<Node>();
+
  	}
-    void CreateRoadMap()
+    IEnumerator CreateRoadMap()
     {
-        while(prmVertices.Count < numOfNodes)
+        while(numOfNodes < maxNodes)
         {
-            print("Tamanho PRM " + prmVertices.Count);
-            prmVertices.Add((GameObject)Instantiate(node, InsertVertex(), node.transform.rotation));
+            print("Numero de nodes: " + numOfNodes);
+            StartCoroutine(InsertNode());
+           // InsertNode();
+            yield return new WaitForSeconds(1.0f);
         }
-    }
-    Vector3 InsertVertex()
+        PrintRoadMapElements();
+
+    }   
+    IEnumerator InsertNode()
     {
         int x, z;
 		var maxPos = plane.localScale.x * 10;
 		x = Mathf.RoundToInt (Random.Range (0, maxPos));
 		z = Mathf.RoundToInt(Random.Range(0, maxPos));
-        return new Vector3(x, 0, z);
-          
+
+        node = (GameObject)Instantiate(nodePrefab, new Vector3(x, 0, z), nodePrefab.transform.rotation);
+        node.name = "Node " + numOfNodes;
+        yield return new WaitForSeconds(1.0f);
+        if (node.GetComponent<NodeInfo>().collisionFree)
+        {
+            roadmap.Add(new Node(numOfNodes));
+            numOfNodes++;
+        }
+        else
+        {
+            Destroy(node);
+        }
     }
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+
+    void PrintRoadMapElements()
+    {
+        foreach(Node n in roadmap)
+        {
+            print(n.name);
+        }
+    }
 }
