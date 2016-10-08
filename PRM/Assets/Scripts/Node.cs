@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Collections;
 
 public class Node : MonoBehaviour {
-
-    private int _id;
-    public string name;
+    //get ID later
+    public int id;
+    public GameObject obj;
     
     // dict com id e custo
     private Dictionary<int, float> neighbours;
     
-    public Node(int id)
+    public Node(int id, GameObject obj)
     {
-        _id = id;
-        name = "Node" + _id;
+        this.id = id;
+        this.obj = obj;
         neighbours = new Dictionary<int, float>();
     }
 
