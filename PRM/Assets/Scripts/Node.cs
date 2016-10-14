@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 
-public class Node : MonoBehaviour {
+public class Node {
     //get ID later
     public int id;
     public GameObject obj;
@@ -17,15 +17,16 @@ public class Node : MonoBehaviour {
         neighbours = new Dictionary<int, float>();
     }
 
-    public void AddEdge(int id, float cost)
+    public void AddEdge(int id, float cost=0)
     {
         if (!(neighbours.ContainsKey(id)))
         {
+//			Debug.Log ("Adicionei: " + id + " ao node " + this.id);
             neighbours.Add(id, cost);
         }
         else
         {
-            print("Vizinho já adicionado");
+			Debug.Log("Vizinho já adicionado");
         }
     }
 }

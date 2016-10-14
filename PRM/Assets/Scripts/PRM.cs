@@ -33,6 +33,7 @@ public class PRM : MonoBehaviour {
         // provavelmeente vai ter edge duplicado
         //depois tem que guardar as edges em alguma estrutura
 
+
         for (int i = 0; i < roadmap.Count; i++)
         {
             for (int j = 0; j < roadmap.Count; j++)
@@ -41,19 +42,32 @@ public class PRM : MonoBehaviour {
                     continue;
                 else
                 {
-                    if (!(Physics.Raycast(roadmap[i].obj.transform.position, roadmap[j].obj.transform.position)))
-                    {
-                        var edge = (GameObject)Instantiate(edgePrefab, edgePrefab.transform.position, edgePrefab.transform.rotation);
-                        edge.GetComponent<LineRenderer>().SetPosition(0, roadmap[i].obj.transform.position);
-                        edge.GetComponent<LineRenderer>().SetPosition(1, roadmap[j].obj.transform.position);
-                        edge.name = "Edge" + roadmap[i].obj.name + roadmap[j].obj.name;
-                    }
-                }
-               
-                yield return new WaitForSeconds(1.0f);
-            }
+					RaycastHit ray;
+					
+					var dir = roadmap [j].obj.transform.position - roadmap [i].obj.transform.position;
+					if (Physics.Raycast (roadmap [i].obj.transform.position, dir, out ray)) 
+					{
+						if (!(ray.transform.CompareTag("Obstacle"))) 
+						{
+							roadmap [i].AddEdge (roadmap [j].id);
+							//pode virar um DrawEdge
+							//precisa tratar os casos ambiguos A->B; B->A
+							var edge = (GameObject)Instantiate (edgePrefab, edgePrefab.transform.position, edgePrefab.transform.rotation);
+							edge.GetComponent<LineRenderer> ().SetPosition (0, roadmap [i].obj.transform.position);
+							edge.GetComponent<LineRenderer> ().SetPosition (1, roadmap [j].obj.transform.position);
+							edge.name = "Edge" + roadmap [i].obj.name + roadmap [j].obj.name;
+						}
+					} 
+					yield return new WaitForSeconds(1.0f);
+						
 
-        }
+				}
+            }
+               
+                yield return new WaitForSeconds(0.5f);
+       	 }
+
+	
         
 
         //PrintRoadMapElements();
