@@ -8,7 +8,7 @@ public class Node {
     public GameObject obj;
     
     // dict com id e custo
-    private Dictionary<int, float> neighbours;
+    public Dictionary<int, float> neighbours;
     
     public Node(int id, GameObject obj)
     {
@@ -28,5 +28,11 @@ public class Node {
         {
 			Debug.Log("Vizinho já adicionado");
         }
+    }
+    public bool HasNode(int id)
+    {
+        Debug.Log("testando vizinhança entre " + this.id + " e " + id);
+        Debug.Log(neighbours.ContainsKey(id));
+        return neighbours.ContainsKey(id);
     }
 }
